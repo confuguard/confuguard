@@ -138,7 +138,7 @@ curl -X POST http://localhost:5444/similarity \
 {
   typo_results: [
     {
-      explanation: "The package name 'matplobblib' is very similar to 'matplotlib', with minor character changes that could confuse users. The description of 'matplobblib' is vague and does not indicate a distinct purpose. The maintainer 'Ackrome' is not recognized as a known maintainer in the community. These factors suggest it could be a typosquat.",
+      explanation: "The package name 'matplobblib' is very similar to 'matplotlib', with minor character changes that could confuse users. The description of 'matplobblib' is vague and does not indicate a distinct purpose. The maintainer 'Ackrome' is not recognized as a known maintainer in the community. These factors suggest it could be a package confusion attack.",
       metadata_missing: false,
       package_name: 'matplotlib',
       typo_category: '1-step D-L dist'
