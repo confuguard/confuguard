@@ -1,0 +1,21 @@
+{
+  "overall": {
+    "total_time": 48440.65848112106,
+    "total_packages": 1540,
+    "total_pairs": 481,
+    "throughput": 0.03179147534916746,
+    "avg_latency": 1.4704834178407142,
+    "median_latency": 0.28795111179351807,
+    "typosquats_identified": 21,
+    "correct_target_matches": 0,
+    "true_positives": 4,
+    "false_positives": 17,
+    "true_negatives": 1223,
+    "false_negatives": 296,
+    "precision": 0.19047619047619047,
+    "recall": 0.013333333333333334,
+    "f1_score": 0.024922118380062305,
+    "accuracy": 0.7967532467532468
+  },
+  "per_ecosystem": {}
+}
