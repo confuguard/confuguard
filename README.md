@@ -89,7 +89,7 @@ python confuguard/app.py
 
 Endpoints:
 
-- **`/detect`**: Detects typosquatting packages by comparing a package against its neighbors. **NOTE: This is the main endpoint that is used in the pipeline. The rest are mainly for testing purposes.**
+- **`/detect`**: Detects confusing packages by comparing a package against its neighbors. **NOTE: This is the main endpoint that is used in the pipeline. The rest are mainly for testing purposes.**
 - `/get_neighbors`: Retrieves neighboring packages based on vector and name-based similarity.
 - `/add_package`: Adds or updates package details in the PostgreSQL database.
 - `/similarity`: Computes cosine similarity between two package embeddings.
@@ -101,7 +101,7 @@ Endpoints:
 ```
 curl -X POST http://localhost:5444/detect \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer $TYPOSQUAT_BEARER_TOKEN" \
+-H "Authorization: Bearer $BEARER_TOKEN" \
 -d '{"package_name": "matplotlip", "registry": "pypi"}'
 ```
 
@@ -110,7 +110,7 @@ curl -X POST http://localhost:5444/detect \
 ```
 curl -X POST http://localhost:5444/get_neighbors \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer $TYPOSQUAT_BEARER_TOKEN" \
+-H "Authorization: Bearer $BEARER_TOKEN" \
 -d '{"package_name": "dotenv", "registry": "pypi"}'
 ```
 
@@ -119,7 +119,7 @@ curl -X POST http://localhost:5444/get_neighbors \
 ```
 curl -X POST http://localhost:5444/add_package \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer $TYPOSQUAT_BEARER_TOKEN" \
+-H "Authorization: Bearer $BEARER_TOKEN" \
 -d '{"package_name": "lodash", "registry": "npm"}'
 ```
 
@@ -128,7 +128,7 @@ curl -X POST http://localhost:5444/add_package \
 ```
 curl -X POST http://localhost:5444/similarity \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer $TYPOSQUAT_BEARER_TOKEN" \
+-H "Authorization: Bearer $BEARER_TOKEN" \
 -d '{"package_name1": "matplotlib", "package_name2": "catplotlib", "registry": "pypi"}'
 ```
 
