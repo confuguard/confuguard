@@ -14,8 +14,9 @@
 |------|-------------|---------------------| ---------|
 | Empirical Analysis | The empirical analysis scripts and data | $4, Figure 2, Table3| [attack_analysis](./attack_analysis) |
 | Implementation of `Confuguard` | The implementation of ConfuGuard, including 6 parts | $5, Figure 3| [confuguard](./confuguard) |
+| Prompt | The prompt we used for Step 5 Benignity Check | Listing 1| [prompt](./confuguard/Part5/prompt_v1.py) |
 | Dataset | We provide the dataset we used, including `NeupaneDB` (1840 packages) and `ConfuDB` (1561 packages)| $6.1| [datasets](./datasets) |
-| Evaluation | The evaluation scripts and results | $6.2-$6.6, Table 4-7, Figure 4-5| [eval](./eval) |
+| Evaluation | The evaluation scripts and results | $6.2-$6.6, Table 4-6, Figure 4-5| [eval](./eval) |
 
 
 
