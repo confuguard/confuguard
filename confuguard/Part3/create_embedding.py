@@ -11,10 +11,8 @@ from functools import partial
 from multiprocessing import Pool, cpu_count, Manager
 
 # Third-party imports
-import struct
 import numpy as np
 import pandas as pd
-import openai
 import psycopg2
 import sqlalchemy
 from loguru import logger
@@ -37,18 +35,16 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import insert
 from pgvector.sqlalchemy import Vector
 import backoff
-import tenacity
-from openai import RateLimitError, APIError
-from openai import OpenAI
+from openai import RateLimitError, APIError, OpenAI
 import sqlite_vec
 
 # Local imports
 try:
-    from python.typosquat.config import MODEL_PATH
-    from python.typosquat.utils import init_connection_engine, clean_postgres
-except:
-    from config import MODEL_PATH
+    from confuguard.config import MODEL_PATH
     from confuguard.utils import init_connection_engine, clean_postgres
+except ImportError:
+    from config import MODEL_PATH
+    from utils import init_connection_engine, clean_postgres
 
 load_dotenv('.env')
 
@@ -93,11 +89,8 @@ model = None
 preprocessor = None
 engines = None  # Declare engines as a global variable
 
-# Add OpenAI import and API key setup at the top
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
 # Initialize OpenAI client globally
-client = OpenAI()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @backoff.on_exception(
     backoff.expo,
@@ -127,7 +120,7 @@ class Preprocessor:
         self.model = model
         self.embedding_model = embedding_model
         if embedding_model == "openai":
-            self.client = OpenAI()  # Initialize OpenAI client
+            self.client = client  # Use global client
 
     def replace_delimiters(self, target: str, replacement: str) -> str:
         target = target.lower()
@@ -248,7 +241,8 @@ class Preprocessor:
 
         return embeddings
 
-    def load_package_names(self, file_path: str) -> list:
+    @staticmethod
+    def load_package_names(file_path: str) -> list:
         data = pd.read_csv(file_path)
 
         if 'package_name' in data.columns:
@@ -740,8 +734,6 @@ def init_worker(save_to, postgres_params, sqlite_binary_db_path, model_path=None
 def process_batch(args, lock, save_to):
     batch_packages, start_idx, end_idx, table_name, file_name = args
 
-    batch_start_time = time.time()
-
     try:
         global preprocessor
         global engines
@@ -763,8 +755,6 @@ def process_batch(args, lock, save_to):
         with lock:
             save_resume_state(end_idx, file_name)
 
-        batch_end_time = time.time()
-        batch_duration = timedelta(seconds=batch_end_time - batch_start_time)
         return True  # Return success status
 
     except Exception as e:
@@ -970,14 +960,14 @@ def main():
             try:
                 # Modify SQLite database path to include embedding model type
                 if args.embedding_model == "openai":
-                    sqlite_binary_db_path = os.path.join(SQLITE_DB_DIR, 'local_embeddings_openai_binary.db')
+                    sqlite_db_path = os.path.join(SQLITE_DB_DIR, 'local_embeddings_openai_binary.db')
                 else:
-                    sqlite_binary_db_path = SQLITE_BINARY_DB_PATH
+                    sqlite_db_path = SQLITE_BINARY_DB_PATH
 
                 # Setup SQLite binary engine
-                logger.info(f"Initializing binary format SQLite database at {sqlite_binary_db_path}")
-                engines['sqlite_binary'] = init_sqlite_engine(sqlite_binary_db_path)
-                logger.success(f"Connected to SQLite binary format database at {sqlite_binary_db_path}")
+                logger.info(f"Initializing binary format SQLite database at {sqlite_db_path}")
+                engines['sqlite_binary'] = init_sqlite_engine(sqlite_db_path)
+                logger.success(f"Connected to SQLite binary format database at {sqlite_db_path}")
             except Exception as e:
                 logger.error(f"Failed to setup SQLite connection: {e}")
                 raise
@@ -1000,8 +990,7 @@ def main():
         # Set the multiprocessing start method to 'fork' (only for Unix-based systems)
         multiprocessing.set_start_method('fork', force=True)
 
-        # Update preprocessor initialization with correct embedding model choice
-        preprocessor = Preprocessor(model, embedding_model=args.embedding_model)
+        # Preprocessor will be initialized in worker processes
 
         # Add overall progress bar for files
         with tqdm(total=len(file_paths), desc="Processing ecosystems",
@@ -1016,8 +1005,7 @@ def main():
                 file_pbar.set_description(f"Processing {source}")
 
                 # Load packages
-                preprocessor_main = Preprocessor(None)
-                packages = preprocessor_main.load_package_names(file_path)
+                packages = Preprocessor.load_package_names(file_path)
                 num_packages = len(packages)
 
                 # Always clean tables when switching between embedding models to avoid dimension mismatch
@@ -1067,7 +1055,7 @@ def main():
                                 create_vector_table(engines['sqlite_binary'], main_table, vector_dim)
 
                 # Pass the modified SQLite path to process_in_batches
-                sqlite_path = sqlite_binary_db_path if args.embedding_model == "openai" else SQLITE_BINARY_DB_PATH
+                sqlite_path = sqlite_db_path if args.save_to in ['sqlite', 'both'] else SQLITE_BINARY_DB_PATH
 
                 process_in_batches(packages, source, file_path, batch_size=BATCH_SIZE,
                                   save_to=args.save_to,

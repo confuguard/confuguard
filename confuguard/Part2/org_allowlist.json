@@ -1,0 +1,45 @@
+{
+  "npm": [
+    "angular",
+    "angular-devkit",
+    "azure",
+    "babel",
+    "google",
+    "google-cloud",
+    "microsoft",
+    "nestjs",
+    "oxc-parser",
+    "oxc-resolver",
+    "react",
+    "typescript",
+    "vue",
+    "nolyfill",
+    "types"
+  ],
+  "maven": [
+    "com.fasterxml",
+    "com.google",
+    "org.apache",
+    "org.hibernate",
+    "org.junit",
+    "org.slf4j",
+    "org.springframework"
+  ],
+  "golang": [
+    "cloud.google.com",
+    "github.com/golang",
+    "github.com/kubernetes",
+    "golang.org",
+    "google.golang.org",
+    "k8s.io"
+  ],
+  "huggingface": [
+    "deepmind",
+    "facebook",
+    "google",
+    "huggingface",
+    "microsoft",
+    "nvidia",
+    "openai"
+  ]
+}

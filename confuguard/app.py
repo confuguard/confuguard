@@ -290,7 +290,7 @@ def process_detection(package_name, registry, target_packages):
     typo_results = []
 
     # Check if the package's namespace is allowlisted
-    if registry in NAMESPACE_ALLOWLIST:
+    if registry in NAMESPACE_ALLOWLIST and NAMESPACE_ALLOWLIST[registry]:
         pkg_namespace = namespace_analyzer._extract_namespace(package_name, registry)
         if pkg_namespace in NAMESPACE_ALLOWLIST[registry]:
             logger.info(f"Namespace {pkg_namespace} is allowlisted. Skipping typosquat detection.")

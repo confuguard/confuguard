@@ -6,12 +6,12 @@ from sqlalchemy.sql import text
 from loguru import logger
 
 try:
-  from config import (
+  from confuguard.config import (
       GCP_PROJECT_ID, GCP_REGION, GCP_INSTANCE_NAME, DB_USER, DB_PASS, DB_NAME, DB_PORT,
       REGISTRIES, ECOSYSTEMS_MAPPING, POP_THRESHOLD,
       HF_GCP_PROJECT_ID, HF_GCP_REGION, HF_GCP_INSTANCE_NAME, HF_DB_USER, HF_DB_PASS, HF_DB_NAME, HF_DB_PORT,
   )
-  from utils import init_connection_engine
+  from confuguard.utils import init_connection_engine
 except:
   from python.typosquat.config import (
       GCP_PROJECT_ID, GCP_REGION, GCP_INSTANCE_NAME, DB_USER, DB_PASS, DB_NAME, DB_PORT,

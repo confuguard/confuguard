@@ -2,6 +2,11 @@
 
 > This is the artifact for the ICSE'26 submission: `ConfuGuard: Using Metadata to Detect Active and Stealthy Package Confusion Attacks Accurately and at Scale`.
 
+Update: We made some changes to the artifact based on the ICSE'26 Revision.
+- We fixed some refactoring issues in the artifact. (Thanks to Reviewer A!)
+- We added the missing `org_allowlist.json` file to the artifact.
+- We added the `prompt_v1.py` and `prompt_v2.py` scripts to the artifact.
+- We added the required external resources and extra setup instructions to the artifact.
 
 ## Table of Contents
 
@@ -35,6 +40,32 @@
 ```
 pip install -r requirements.txt
 ```
+
+## External Dependencies Required
+
+This project requires the following external setup:
+
+**OpenAI API:**
+- Set `OPENAI_API_KEY` environment variable with your API key
+
+**Google Cloud PostgreSQL (for cloud deployment):**
+- Set `GCP_PROJECT_ID` environment variable
+- Set `GCP_REGION` environment variable  
+- Set `GCP_INSTANCE_NAME` environment variable
+- Set `DB_USER` environment variable
+- Set `DB_PASS` environment variable
+- Set `DB_NAME` environment variable
+
+**Bearer Token:**
+- Set `TYPOSQUAT_BEARER_TOKEN` environment variable for API authentication
+
+**Package Metadata Database:**
+- As noted in the paper, ConfuGuard uses the package metadata database to get the package metadata. The metadata database should be installed and running before running the ConfuGuard.
+- ConfuGuard implementation supports two kinds of metadata databases:
+  - Google Cloud PostgreSQL Database (for cloud deployment)
+  - Local PostgreSQL with pgvector extension (for local testing)
+  - Local SQLite database (for local testing)
+
 
 
 # Run the full script
