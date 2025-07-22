@@ -2,7 +2,7 @@
 
 > This is the artifact for the ICSE'26 submission: `ConfuGuard: Using Metadata to Detect Active and Stealthy Package Confusion Attacks Accurately and at Scale`.
 
-Update: We made some changes to the artifact based on the ICSE'26 Revision.
+**Update**: We made some changes to the artifact as part of the ICSE'26 Revision.
 - We fixed some refactoring issues in the artifact. (Thanks to Reviewer A!)
 - We added the missing `org_allowlist.json` file to the artifact.
 - We added the `prompt_v1.py` and `prompt_v2.py` scripts to the artifact.
